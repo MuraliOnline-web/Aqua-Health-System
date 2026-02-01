@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Fish Disease Detector</string>
+    <string name="title_activity_main">Fish Disease Detector</string>
+    <string name="package_name">com.aquahealth.fishdetector</string>
+    <string name="custom_url_scheme">com.aquahealth.fishdetector</string>
+</resources>

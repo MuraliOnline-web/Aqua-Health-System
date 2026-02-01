@@ -1,0 +1,40 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+hs_err_pid*.log
+replay_pid*.log
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment files
+.env.local
+.env.production
+.env.development
+
+# Keystore and build artifacts
+keystore.jks
+*.apk
+*.aab
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Android build files
+android/app/build/
+android/build/
+local.properties

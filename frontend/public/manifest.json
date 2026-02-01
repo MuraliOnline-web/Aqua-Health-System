@@ -1,0 +1,25 @@
+{
+  "name": "Fish Disease Detector",
+  "short_name": "Fish Health",
+  "description": "AI-powered disease identification for aquaculture",
+  "theme_color": "#0EA5E9",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
