@@ -30,7 +30,7 @@ app.add_middleware(
 )
 
 # HuggingFace configuration
-HF_API_URL = "https://api-inference.huggingface.co/models/Saon110/fish-shrimp-disease-classifier"
+HF_API_URL = "https://router.huggingface.co/pipeline/image-classification/Saon110/fish-shrimp-disease-classifier"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
 @app.get("/")
