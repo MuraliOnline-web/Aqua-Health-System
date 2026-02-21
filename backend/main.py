@@ -8,7 +8,7 @@ import os
 from tensorflow.keras.models import load_model
 
 app = FastAPI()
-
+# test comment
 # CORS (React support)
 app.add_middleware(
     CORSMiddleware,
