@@ -198,13 +198,16 @@ const Home = () => {
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
         <div className="flex justify-around items-center py-3 max-w-md mx-auto">
-          <Button variant="ghost" className="flex-col h-auto text-cyan-600">
+          <Button
+            variant="ghost"
+            className="flex-col h-auto text-cyan-600 transition-all shadow-md shadow-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/50"
+          >
             <Camera className="h-5 w-5" />
             <span className="text-xs mt-1">{tr("home")}</span>
           </Button>
           <Button
             variant="ghost"
-            className="flex-col h-auto"
+            className="flex-col h-auto transition-all shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40"
             onClick={() => navigate("/scan")}
           >
             <Camera className="h-5 w-5" />
@@ -212,7 +215,7 @@ const Home = () => {
           </Button>
           <Button
             variant="ghost"
-            className="flex-col h-auto"
+            className="flex-col h-auto transition-all shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40"
             onClick={() => navigate("/history")}
           >
             <FileText className="h-5 w-5" />
@@ -220,7 +223,7 @@ const Home = () => {
           </Button>
           <Button
             variant="ghost"
-            className="flex-col h-auto"
+            className="flex-col h-auto transition-all shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40"
             onClick={() => navigate("/profile")}
           >
             <User className="h-5 w-5" />
