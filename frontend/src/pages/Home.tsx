@@ -167,6 +167,8 @@ const Home = () => {
                   <img
                     src={scan.thumbnail}
                     alt="scan"
+                    loading="lazy"
+                    decoding="async"
                     className="w-12 h-12 rounded object-cover"
                   />
                   <div className="flex-1">

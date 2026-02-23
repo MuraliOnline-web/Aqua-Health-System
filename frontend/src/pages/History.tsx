@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar, Copy, Filter, Share2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,10 +28,13 @@ interface ScanHistoryItem {
   result: any;
 }
 
+const HISTORY_PAGE_SIZE = 10;
+
 const History = () => {
   const navigate = useNavigate();
   const [history, setHistory] = useState<ScanHistoryItem[]>([]);
   const [filterSeverity, setFilterSeverity] = useState("all");
+  const [visibleCount, setVisibleCount] = useState(HISTORY_PAGE_SIZE);
   const [profile, setProfile] = useState<UserProfile>(defaultProfile);
 
   const tr = (key: string) => t(profile.language, key);
@@ -69,16 +72,30 @@ const History = () => {
     };
   }, []);
 
-  const filteredHistory =
-    filterSeverity === "all"
-      ? history
-      : history.filter((item) => {
-          const severity = item.severity.toLowerCase();
-          if (filterSeverity === "moderate") {
-            return severity === "moderate" || severity === "medium";
-          }
-          return severity === filterSeverity;
-        });
+  const filteredHistory = useMemo(
+    () =>
+      filterSeverity === "all"
+        ? history
+        : history.filter((item) => {
+            const severity = item.severity.toLowerCase();
+            if (filterSeverity === "moderate") {
+              return severity === "moderate" || severity === "medium";
+            }
+            return severity === filterSeverity;
+          }),
+    [history, filterSeverity],
+  );
+
+  const visibleHistory = useMemo(
+    () => filteredHistory.slice(0, visibleCount),
+    [filteredHistory, visibleCount],
+  );
+
+  const canLoadMore = visibleCount < filteredHistory.length;
+
+  useEffect(() => {
+    setVisibleCount(HISTORY_PAGE_SIZE);
+  }, [filterSeverity]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
@@ -170,7 +187,7 @@ const History = () => {
 
       <div className="px-4 mt-6 space-y-4">
         {/* Filters */}
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
           <Filter className="h-4 w-4 text-gray-500" />
           {[
             { key: "all", label: tr("all") },
@@ -196,18 +213,20 @@ const History = () => {
 
         {/* History List */}
         <div className="space-y-3">
-          {filteredHistory.map((item) => (
+          {visibleHistory.map((item) => (
             <ContextMenu key={item.id}>
               <ContextMenuTrigger asChild>
                 <Card
                   onClick={() => handleItemClick(item)}
-                  className="p-4 hover:shadow-lg transition-all cursor-pointer"
+                  className="p-3 hover:shadow-lg transition-all cursor-pointer"
                 >
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <img
                       src={item.thumbnail}
                       alt="scan"
-                      className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
@@ -246,6 +265,23 @@ const History = () => {
             </ContextMenu>
           ))}
         </div>
+
+        {filteredHistory.length > 0 && (
+          <div className="flex items-center justify-between pt-1">
+            <p className="text-xs text-gray-500">
+              {tr("showingItems")} {visibleHistory.length} {tr("ofItems")} {filteredHistory.length}
+            </p>
+            {canLoadMore && (
+              <Button
+                onClick={() => setVisibleCount((prev) => prev + HISTORY_PAGE_SIZE)}
+                variant="outline"
+                size="sm"
+              >
+                {tr("loadMore")}
+              </Button>
+            )}
+          </div>
+        )}
 
         {filteredHistory.length === 0 && (
           <Card className="p-8 text-center text-gray-500">
