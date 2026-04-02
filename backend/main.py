@@ -36,11 +36,18 @@ fish_classes = {
     6: "Fin Rot / Tail Rot"
 }
 
+# Shrimp model was trained from numeric folder names (7,8,9,10).
+# Keras flow_from_directory sorts folder names lexicographically, so indices follow: 10, 7, 8, 9.
+_shrimp_class_id_to_disease = {
+    "7": "Black Spot Disease",
+    "8": "White Syndrome (Shell Damage)",
+    "9": "Red Body Disease",
+    "10": "White Muscle Disease",
+}
+_shrimp_class_order = sorted(_shrimp_class_id_to_disease.keys())
 shrimp_classes = {
-    0: "Black Spot Disease",
-    1: "White Syndrome (Shell Damage)",
-    2: "Red Body Disease",
-    3: "White Muscle Disease"
+    idx: _shrimp_class_id_to_disease[class_id]
+    for idx, class_id in enumerate(_shrimp_class_order)
 }
 
 # ✅ SMART ADVISORY DATA
@@ -125,6 +132,11 @@ def preprocess_image(image):
 @app.get("/")
 def home():
     return {"message": "Aqua Health System API running 🚀"}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
