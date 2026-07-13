@@ -20,7 +20,6 @@ It returns disease advisory details (symptoms, causes, treatment, prevention) an
 
 ```text
 AHS/
-   runtime.txt
   backend/
     main.py
     model/
@@ -70,7 +69,7 @@ AHS/
 - Pillow (image preprocessing)
 - NumPy
 
-See `backend/requirements.txt` and `runtime.txt`.
+See `backend/requirements.txt` and `backend/runtime.txt`.
 
 ### Frontend
 
