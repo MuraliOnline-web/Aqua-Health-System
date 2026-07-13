@@ -242,6 +242,19 @@ Root frontend app entry:
 - `frontend/src/main.tsx` -> mounts app
 - `frontend/src/App.tsx` -> Router + providers
 
+### 7.0 Frontend Overview
+
+The frontend is a React + Vite + TypeScript app with:
+
+- React 18
+- TypeScript
+- Vite
+- React Router DOM
+- TanStack Query
+- Tailwind CSS
+- shadcn/ui and Radix UI components
+- Capacitor for Android packaging
+
 ### 7.1 Routing Map
 
 - `/` -> Home
@@ -293,6 +306,62 @@ File `frontend/src/lib/appSettings.ts` manages:
 ### 7.6 Legacy/Alternate UI Path (Not Routed)
 
 `frontend/src/pages/Index.tsx` and related components (`AppHeader`, `ImageUpload`, `DetectionButton`, `ResultsSection`) represent an alternate detector UX but are not connected in `App.tsx` route definitions.
+
+### 7.7 API Integration
+
+File: `frontend/src/services/api.ts`
+
+- In dev: `API_URL = http://localhost:8000`
+- In prod: `API_URL = VITE_API_URL` fallback `http://localhost:8000`
+- Uploads image to `POST ${API_URL}/predict/`
+- Health check uses `GET ${API_URL}/`
+
+### 7.8 Local Setup
+
+1. Install dependencies.
+
+```powershell
+cd C:\AHS\frontend
+npm install
+```
+
+2. Start the frontend dev server.
+
+```powershell
+npm run dev
+```
+
+3. Optional: point the frontend to a deployed backend by setting `VITE_API_URL`.
+
+### 7.9 Available Scripts
+
+- `npm run dev` -> Start Vite dev server
+- `npm run build` -> Build for production
+- `npm run preview` -> Preview the production build locally
+- `npm run lint` -> Run ESLint
+- `npm run test` -> Run Vitest once
+- `npm run test:watch` -> Run Vitest in watch mode
+
+### 7.10 Android Build
+
+The project includes Capacitor Android support under `frontend/android/`.
+
+Typical release flow:
+
+```powershell
+cd C:\AHS\frontend
+npm run build
+npx cap sync android
+npx cap open android
+```
+
+Make sure the production backend URL is configured before building the mobile app.
+
+### 7.11 Frontend Notes
+
+- Scan history is stored in browser local storage under `scanHistory`.
+- Profile data is stored in browser local storage under `userProfile`.
+- Disease reference data lives in `frontend/src/data/diseaseLibrary.ts`.
 
 ---
 
