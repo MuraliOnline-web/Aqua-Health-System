@@ -5,3 +5,4 @@ Pillow
 requests
 numpy
 tensorflow
+python-3.11
