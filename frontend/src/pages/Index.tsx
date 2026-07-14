@@ -4,10 +4,7 @@ import ImageUpload from "@/components/ImageUpload";
 import DetectionButton from "@/components/DetectionButton";
 import ResultsSection, { DetectionResult } from "@/components/ResultsSection";
 import ErrorMessage from "@/components/ErrorMessage";
-
-const API_URL = import.meta.env.DEV
-  ? "/api"
-  : import.meta.env.VITE_API_URL || "/api";
+import { predictDisease } from "@/services/api";
 
 const Index = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -43,26 +40,19 @@ const Index = () => {
     setResult(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", imageFile);
-
-      const response = await fetch(`${API_URL}/predict`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Backend error");
-      }
-
-      const data = await response.json();
+      const data = await predictDisease(imageFile);
 
       const mappedResult: DetectionResult = {
-        diseaseName: data.disease_name || data.label?.replace("Fish_", "") || "Unknown",
-        confidence: Math.round((data.confidence || data.score || 0) * 100),
-        cause: data.cause || "Information not available from detection model",
-        severity: data.severity || "Medium",
-        treatment: data.treatment || "Consult a fish disease specialist for proper treatment",
+        diseaseName: data.disease || "Unknown",
+        confidence: Math.round(data.confidence || 0),
+        cause: data.causes || "Information not available from detection model",
+        severity:
+          data.severity === "High" || data.severity === "Low"
+            ? data.severity
+            : "Medium",
+        treatment:
+          data.treatment ||
+          "Consult a fish disease specialist for proper treatment",
       };
 
       setResult(mappedResult);
