@@ -1,492 +1,378 @@
-# AHS Project Workflow and Technical Documentation
+# AquaCare
+AI-powered Fish & Shrimp Disease Detection System
 
-## 1. Project Summary
+AquaCare is an end-to-end disease detection platform for aquaculture that classifies uploaded fish and shrimp images, estimates disease confidence and severity, and returns practical advisory guidance for treatment and prevention. The project combines a FastAPI + TensorFlow backend with a React + TypeScript frontend, plus mobile packaging through Capacitor for Android support.
 
-AHS is an end-to-end fish and shrimp disease detection system with:
+## Badges
 
-- `backend/`: FastAPI inference service using TensorFlow/Keras models
-- `frontend/`: React + Vite + TypeScript web/mobile UI (Capacitor Android enabled)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://www.tensorflow.org)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![License](https://img.shields.io/badge/License-Unlicensed-lightgrey?style=for-the-badge)](./LICENSE)
 
-The system classifies an uploaded image in 2 stages:
+## 🌐 Live Demo
 
-1. Animal type detection (`fish` vs `shrimp`)
-2. Disease classification using type-specific model
+- Frontend: [https://aqua-health-system-frontend.vercel.app](https://aqua-health-system-frontend.vercel.app)
+- Backend API: [https://aqua-health-system-backend.onrender.com](https://aqua-health-system-backend.onrender.com)
+- Swagger API: [https://aqua-health-system-backend.onrender.com/docs](https://aqua-health-system-backend.onrender.com/docs)
 
-It returns disease advisory details (symptoms, causes, treatment, prevention) and severity guidance.
+## ✨ Features
 
----
+- AI-powered disease detection
+- Fish and shrimp classification
+- Deep learning models for staged inference
+- Disease confidence score
+- Disease severity estimation
+- Treatment recommendations
+- Prevention guidance
+- Disease library
+- Scan history
+- Mobile-friendly interface
+- Android support using Capacitor
+- Responsive UI
 
-## 2. Repository Structure
-
-```text
-AHS/
-  backend/
-    main.py
-    model/
-      type_classifier.h5
-      fish_disease_model.h5
-      shrimp_disease_model.h5
-    training/
-      train_type_model.py
-      train_fish_model.py
-      train_shrimp_model.py
-      compute_weights.py
-    Maindataset/
-      download_dataset.py
-      analyze_dataset.py
-      create_type_dataset.py
-      balance_type_dataset.py
-      create_fish_dataset.py
-      balance_shrimp_dataset.py
-      view_samples.py
-      check_labels.py
-      dataset/
-        raw/
-        type/
-        type_balanced/
-      fish_disease/
-      shrimp_disease/
-  frontend/
-    src/
-      pages/
-      services/
-      data/
-      lib/
-    android/
-    capacitor.config.ts
-    vite.config.ts
-```
-
----
-
-## 3. Technology Stack
-
-### Backend
-
-- Python 3.11
-- FastAPI + Uvicorn
-- TensorFlow / Keras
-- Pillow (image preprocessing)
-- NumPy
-
-See `backend/requirements.txt` and `backend/runtime.txt`.
+## 🧰 Technology Stack
 
 ### Frontend
 
-- React 18 + TypeScript
-- Vite
-- React Router DOM
-- TanStack Query
-- Tailwind + shadcn-ui + Radix UI
-- Capacitor (Android packaging)
+| Technology | Purpose |
+| --- | --- |
+| React 18 | Component-based user interface |
+| TypeScript | Type-safe application logic |
+| Vite | Fast development server and production builds |
+| React Router DOM | Client-side routing |
+| TanStack Query | Async data and server-state management |
+| Tailwind CSS + shadcn/ui + Radix UI | UI styling and accessible components |
+| Capacitor | Android packaging and mobile runtime |
 
-See `frontend/package.json`.
+### Backend
 
----
+| Technology | Purpose |
+| --- | --- |
+| Python 3.11 | Backend runtime |
+| FastAPI | REST API and file upload handling |
+| Uvicorn | ASGI server |
+| Pillow | Image decoding and preprocessing |
+| NumPy | Tensor manipulation |
+| Requests | HTTP utilities used by the backend environment |
 
-## 4. ML Models Used
+### Machine Learning
 
-Three model files are loaded by `backend/main.py`:
+| Component | Details |
+| --- | --- |
+| Framework | TensorFlow / Keras |
+| Input size | 224 x 224 x 3 |
+| Type model | Binary classifier for fish vs shrimp |
+| Fish model | 7-class disease classifier |
+| Shrimp model | 4-class disease classifier |
+| Base architecture | MobileNetV2 with frozen base and custom dense head |
 
-1. `type_classifier.h5`
-   - Purpose: binary type classification (`fish` vs `shrimp`)
-   - Training script: `backend/training/train_type_model.py`
-   - Architecture: MobileNetV2 base (`include_top=False`, ImageNet weights), frozen base, GAP + Dense(128, relu) + Dense(1, sigmoid)
-   - Input size: `224x224x3`
+### Deployment
 
-2. `fish_disease_model.h5`
-   - Purpose: fish disease multiclass classification (7 classes)
-   - Training script: `backend/training/train_fish_model.py`
-   - Architecture: MobileNetV2 base, frozen base, GAP + Dense(128, relu) + Dropout(0.5) + Dense(7, softmax)
-   - Input size: `224x224x3`
+| Platform | Purpose |
+| --- | --- |
+| Render | Backend hosting for FastAPI |
+| Vercel | Frontend hosting for the Vite build |
+| Android Studio + Capacitor | APK generation for mobile distribution |
 
-3. `shrimp_disease_model.h5`
-   - Purpose: shrimp disease multiclass classification (4 classes)
-   - Training script: `backend/training/train_shrimp_model.py`
-   - Architecture: MobileNetV2 base, frozen base, GAP + Dense(128, relu) + Dropout(0.5) + Dense(4, softmax)
-   - Input size: `224x224x3`
+## 🏗️ Project Architecture
 
-### Inference-time Class Mapping
-
-In `backend/main.py`:
-
-- Fish class indices (0-6) map to:
-  - `Red Spot Disease`
-  - `Hemorrhagic Septicemia`
-  - `Gill Disease`
-  - `Fungal Infection`
-  - `Healthy`
-  - `Parasitic Infection`
-  - `Fin Rot / Tail Rot`
-
-- Shrimp original labels are numeric folders `7, 8, 9, 10`
-- Because Keras sorts folder names lexicographically, index order becomes `10, 7, 8, 9`
-- Runtime mapping is explicitly corrected in code before returning disease names.
-
----
-
-## 5. Dataset and Training Workflow
-
-## 5.1 Source Dataset
-
-- Dataset source script: `backend/Maindataset/download_dataset.py`
-- Dataset ID: `Saon110/bd-fish-disease-dataset` (Hugging Face datasets)
-- Raw output format: `Maindataset/dataset/raw/<split>/<label>/image.jpg`
-
-## 5.2 Label Groups
-
-- Fish labels: `0,1,2,3,4,5,6`
-- Shrimp labels: `7,8,9,10`
-
-## 5.3 Preparation Scripts
-
-1. `create_fish_dataset.py`
-   - Copies fish classes from raw training split to fish-only training directory.
-
-2. `balance_shrimp_dataset.py`
-   - Copies shrimp classes to shrimp training directory.
-   - Downsamples classes over target count (`TARGET_COUNT=400`) for balancing.
-
-3. `create_type_dataset.py`
-   - Creates binary type dataset (`fish` and `shrimp`) from all class folders.
-   - Prefixes filename with class id to avoid collisions.
-
-4. `balance_type_dataset.py`
-   - Balances type classes to target size (`TARGET=1400`) using downsampling.
-
-5. `analyze_dataset.py` / `view_samples.py`
-   - Distribution checks and quick visual inspection.
-
-6. `compute_weights.py`
-   - Computes class weights from raw training labels.
-
-## 5.4 Training Scripts
-
-- `train_type_model.py`: binary classifier
-- `train_fish_model.py`: 7-class fish disease classifier
-- `train_shrimp_model.py`: 4-class shrimp disease classifier
-
-All use image normalization (`rescale=1./255`) and augmentation.
-
----
-
-## 6. Backend Runtime Workflow
-
-Main service file: `backend/main.py`
-
-### 6.1 Startup
-
-- Initializes FastAPI app
-- Enables permissive CORS (`allow_origins=["*"]`)
-- Loads all 3 model files into memory
-- Builds disease metadata dictionary (`disease_info`) for advisory text
-
-### 6.2 API Endpoints
-
-1. `GET /`
-   - Returns service-up message
-
-2. `GET /health`
-   - Returns health status (`{"status":"ok"}`)
-
-3. `POST /predict/`
-   - Input: multipart form-data with `file`
-   - Pipeline:
-     1. Read image bytes
-     2. Convert to RGB
-     3. Resize to `224x224`
-     4. Normalize [0..1]
-     5. Predict type via `type_model`
-     6. Route to fish or shrimp disease model
-     7. Compute top class + confidence
-     8. If confidence < 0.5, return `Unknown Disease`
-     9. Else compute severity:
-        - `> 0.8` -> `High`
-        - `> 0.6` -> `Moderate`
-        - else -> `Low`
-    10. Attach advisory info (`symptoms`, `causes`, `treatment`, `prevention`)
-
-### 6.3 Response Payload Shape
-
-Typical successful response:
-
-```json
-{
-  "type": "Fish 🐟",
-  "disease": "Red Spot Disease",
-  "confidence": 91.27,
-  "severity": "High",
-  "symptoms": "...",
-  "causes": "...",
-  "treatment": "...",
-  "prevention": "..."
-}
+```text
+AquaCare/
+├── backend/
+│   ├── main.py
+│   ├── Procfile
+│   ├── render.yaml
+│   ├── runtime.txt
+│   ├── requirements.txt
+│   ├── model/
+│   │   ├── fish_disease_model.h5
+│   │   ├── shrimp_disease_model.h5
+│   │   └── type_classifier.h5
+│   ├── training/
+│   │   ├── train_fish_model.py
+│   │   ├── train_shrimp_model.py
+│   │   ├── train_type_model.py
+│   │   └── compute_weights.py
+│   └── Maindataset/
+│       ├── download_dataset.py
+│       ├── analyze_dataset.py
+│       ├── create_fish_dataset.py
+│       ├── create_type_dataset.py
+│       ├── balance_shrimp_dataset.py
+│       ├── balance_type_dataset.py
+│       ├── check_labels.py
+│       ├── view_samples.py
+│       └── dataset/
+├── frontend/
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   ├── components/
+│   │   ├── data/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   └── services/
+│   ├── public/
+│   ├── android/
+│   ├── capacitor.config.ts
+│   ├── vite.config.ts
+│   ├── package.json
+│   └── bun.lockb
+└── README.md
 ```
 
-Unknown response path includes:
+## 🔄 Prediction Workflow
 
-```json
-{
-  "disease": "Unknown Disease",
-  "severity": "Uncertain",
-  "message": "This disease is not recognized in the trained dataset..."
-}
+```mermaid
+flowchart TD
+    A[User Upload] --> B[Backend API]
+    B --> C[Animal Type Detection]
+    C --> D[Disease Detection]
+    D --> E[Advisory Generation]
+    E --> F[Frontend Results]
 ```
 
----
+The backend performs a two-stage inference flow:
 
-## 7. Frontend Runtime Workflow
+1. The uploaded image is resized to 224 x 224 and normalized.
+2. The type classifier determines whether the image is fish or shrimp.
+3. The appropriate disease model runs next.
+4. The backend computes the top prediction and confidence score.
+5. Confidence is converted into a severity label.
+6. Advisory data is attached, including symptoms, causes, treatment, and prevention.
+7. The frontend renders the result and stores the scan in local history.
 
-Root frontend app entry:
+## 🖼️ Screenshots
 
-- `frontend/src/main.tsx` -> mounts app
-- `frontend/src/App.tsx` -> Router + providers
+Add your screenshots here to present the product visually in GitHub:
 
-### 7.0 Frontend Overview
+| Screen | Placeholder |
+| --- | --- |
+| Home Screen | Add screenshot here |
+| Scan Screen | Add screenshot here |
+| Result Screen | Add screenshot here |
+| Disease Library | Add screenshot here |
+| History | Add screenshot here |
+| Profile | Add screenshot here |
 
-The frontend is a React + Vite + TypeScript app with:
+## 🧪 Machine Learning and Data Pipeline
 
-- React 18
-- TypeScript
-- Vite
-- React Router DOM
-- TanStack Query
-- Tailwind CSS
-- shadcn/ui and Radix UI components
-- Capacitor for Android packaging
+### Model files loaded at runtime
 
-### 7.1 Routing Map
+| Model file | Purpose | Training script | Notes |
+| --- | --- | --- | --- |
+| `backend/model/type_classifier.h5` | Binary fish vs shrimp classifier | `backend/training/train_type_model.py` | MobileNetV2 backbone with dense head |
+| `backend/model/fish_disease_model.h5` | Fish disease classifier | `backend/training/train_fish_model.py` | 7 output classes |
+| `backend/model/shrimp_disease_model.h5` | Shrimp disease classifier | `backend/training/train_shrimp_model.py` | 4 output classes |
 
-- `/` -> Home
-- `/scan` -> Scan
-- `/result` -> Result
-- `/disease-library` -> Disease list
-- `/disease-library/:id` -> Disease detail
-- `/history` -> Scan history
-- `/profile` -> User profile/settings
-- `*` -> NotFound
+### Dataset preparation workflow
 
-### 7.2 API Integration
+| Script | Purpose |
+| --- | --- |
+| `backend/Maindataset/download_dataset.py` | Downloads the source dataset from Hugging Face |
+| `backend/Maindataset/create_fish_dataset.py` | Builds the fish-only training directory |
+| `backend/Maindataset/balance_shrimp_dataset.py` | Copies and balances shrimp classes |
+| `backend/Maindataset/create_type_dataset.py` | Creates the binary fish/shrimp dataset |
+| `backend/Maindataset/balance_type_dataset.py` | Balances the binary type dataset |
+| `backend/Maindataset/analyze_dataset.py` | Reviews class distribution |
+| `backend/Maindataset/view_samples.py` | Visual sample inspection |
+| `backend/Maindataset/check_labels.py` | Label validation |
+| `backend/training/compute_weights.py` | Computes class weights from raw labels |
 
-File: `frontend/src/services/api.ts`
+### Runtime mapping notes
 
-- In dev: `API_URL = http://localhost:8000`
-- In prod: `API_URL = VITE_API_URL` fallback `http://localhost:8000`
-- Uploads image to `POST ${API_URL}/predict/`
+- Fish classes are mapped from indices `0` to `6`.
+- Shrimp classes are mapped from numeric folders `7`, `8`, `9`, and `10`.
+- The shrimp directory order is corrected at runtime because Keras sorts folder names lexicographically.
+- Unknown disease handling is triggered when confidence drops below the configured threshold.
 
-### 7.3 User Scan Flow (Active)
+## 📚 Technical Notes
 
-1. Home page action buttons route to scan mode.
-2. Scan page lets user capture (`capture=environment`) or upload image.
-3. Frontend calls `predictDisease(file)`.
-4. Receives backend result.
-5. Saves scan to browser localStorage key `scanHistory` (max 50 entries).
-6. Navigates to `/result` with route state `{ result, image }`.
-7. Result page renders prediction + advisory details.
-8. History page reads, filters, paginates, copies/shares/deletes past scans.
+- The backend enables CORS for `http://localhost:5173`, `http://localhost:8080`, and `https://aqua-health-system-frontend.vercel.app`.
+- The API returns advisory fields for symptoms, causes, treatment, and prevention.
+- The frontend stores scan history in `localStorage` under `scanHistory`.
+- The frontend stores user profile data in `localStorage` under `userProfile`.
+- `frontend/src/pages/Index.tsx` and related components exist as an alternate UI path, while the active router is defined in `frontend/src/App.tsx`.
+- Default development ports are `8000` for the backend and `8080` for the frontend.
 
-### 7.4 Local State Persistence
+## 🛠️ Installation Guide
 
-- `scanHistory` (localStorage)
-- `userProfile` (localStorage)
+### Backend
 
-File `frontend/src/lib/appSettings.ts` manages:
+The backend lives in [`backend/`](backend).
 
-- User profile schema
-- Save/read profile utilities
-- i18n translations (`english`, `hindi`, `telugu`)
-- Severity/type translation helpers
+```powershell
+cd C:\AHS\backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
-### 7.5 Disease Library
+### Frontend
 
-- Static data file: `frontend/src/data/diseaseLibrary.ts`
-- Supports search + fish/shrimp filtering
-- Disease detail page shows causes/treatment/prevention from static content
-
-### 7.6 Legacy/Alternate UI Path (Not Routed)
-
-`frontend/src/pages/Index.tsx` and related components (`AppHeader`, `ImageUpload`, `DetectionButton`, `ResultsSection`) represent an alternate detector UX but are not connected in `App.tsx` route definitions.
-
-### 7.7 API Integration
-
-File: `frontend/src/services/api.ts`
-
-- In dev: `API_URL = http://localhost:8000`
-- In prod: `API_URL = VITE_API_URL` fallback `http://localhost:8000`
-- Uploads image to `POST ${API_URL}/predict/`
-- Health check uses `GET ${API_URL}/`
-
-### 7.8 Local Setup
-
-1. Install dependencies.
+The frontend lives in [`frontend/`](frontend).
 
 ```powershell
 cd C:\AHS\frontend
 npm install
-```
-
-2. Start the frontend dev server.
-
-```powershell
 npm run dev
 ```
 
-3. Optional: point the frontend to a deployed backend by setting `VITE_API_URL`.
+### Environment Variables
 
-### 7.9 Available Scripts
+| Variable | Scope | Purpose |
+| --- | --- | --- |
+| `VITE_API_URL` | Frontend | Points the UI to the deployed backend API in production |
+| `PORT` | Backend hosting platform | Provided by Render and similar services at runtime |
 
-- `npm run dev` -> Start Vite dev server
-- `npm run build` -> Build for production
-- `npm run preview` -> Preview the production build locally
-- `npm run lint` -> Run ESLint
-- `npm run test` -> Run Vitest once
-- `npm run test:watch` -> Run Vitest in watch mode
+The frontend uses `http://localhost:8000` during development and falls back to `https://aqua-health-system-backend.onrender.com` in production if `VITE_API_URL` is not set.
 
-### 7.10 Android Build
+### Running Locally
 
-The project includes Capacitor Android support under `frontend/android/`.
+1. Start the backend first so the API is available.
+2. Start the frontend development server.
+3. Open the frontend in the browser and upload an image from the scan page.
+4. Confirm the result page shows the prediction, confidence, severity, and advisory guidance.
 
-Typical release flow:
+## 🚀 Deployment
 
-```powershell
-cd C:\AHS\frontend
-npm run build
-npx cap sync android
-npx cap open android
-```
+### Render deployment
 
-Make sure the production backend URL is configured before building the mobile app.
+The backend includes the following deployment files:
 
-### 7.11 Frontend Notes
+- [`backend/Procfile`](backend/Procfile)
+- [`backend/render.yaml`](backend/render.yaml)
 
-- Scan history is stored in browser local storage under `scanHistory`.
-- Profile data is stored in browser local storage under `userProfile`.
-- Disease reference data lives in `frontend/src/data/diseaseLibrary.ts`.
-
----
-
-## 8. Dev/Execution Commands
-
-## 8.1 Backend
-
-```powershell
-cd C:\AHS\backend
-& .\.venv\Scripts\Activate.ps1
-uvicorn main:app --reload
-```
-
-## 8.2 Frontend
-
-```powershell
-cd C:\AHS\frontend
-npm run dev
-```
-
-Default dev URLs:
-
-- Frontend: Vite on port `8080`
-- Backend: FastAPI on port `8000`
-
----
-
-## 9. Mobile (Android) Workflow
-
-Capacitor is configured in `frontend/capacitor.config.ts`:
-
-- `appId`: `com.aquahealth.fishdetector`
-- Web build directory: `dist`
-- Android scheme: `https`
-- `cleartext: true`
-
-Build flow (after setting production API URL):
-
-```bash
-npm run build
-npx cap sync android
-npx cap open android
-```
-
-Then build APK from Android Studio.
-
----
-
-## 10. Deployment Workflow
-
-## 10.1 Backend Deployment
-
-Configuration files:
-
-- `backend/Procfile`
-- `backend/render.yaml`
-
-Start command:
+The recommended Render start command is:
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
-## 10.2 Frontend Deployment
+### Vercel deployment
 
-- Deploy static Vite output (`dist`) to Vercel/Netlify/etc.
-- Set `VITE_API_URL` to deployed backend URL.
+The frontend is designed for static deployment to Vercel using the Vite build output in `dist/`.
 
-## 10.3 Production Wiring
+Recommended build command:
 
-1. Deploy backend
-2. Copy backend URL
-3. Set frontend production env `VITE_API_URL`
-4. Build and deploy frontend
-5. For APK: rebuild + sync capacitor with production URL
+```bash
+npm run build
+```
 
----
+### Production environment variables
 
-## 11. Configuration Notes and Caveats
+| Platform | Variable | Example value |
+| --- | --- | --- |
+| Frontend | `VITE_API_URL` | `https://aqua-health-system-backend.onrender.com` |
+| Backend | `PORT` | Provided automatically by the hosting platform |
 
-1. TypeScript config
-   - `frontend/tsconfig.app.json` includes path alias support with `baseUrl` + `paths`.
-   - `ignoreDeprecations` is set to `6.0` to suppress current TS deprecation warning for `baseUrl`.
+Before deploying the frontend, confirm that `VITE_API_URL` points to the live backend API so the scan flow works in production and inside the Android build.
 
-2. Documentation drift exists
-   - Some docs reference old folder names (`C:\projects\...`) from earlier setup; current workspace root is `C:\AHS`.
+## 📘 API Documentation
 
-3. Backend docs vs implementation
-   - Some external docs mention `/predict` without trailing slash and different `/health` payload.
-   - Current implemented endpoint is `/predict/` and health payload is `{"status":"ok"}`.
+Base URL: `https://aqua-health-system-backend.onrender.com`
 
-4. Model files are required at runtime
-   - Missing `.h5` files under `backend/model/` will break backend startup.
+### `GET /`
 
----
+Returns a simple service message.
 
-## 12. End-to-End Sequence Diagram (Text)
+**Example request**
 
-1. User opens frontend app (`/`).
-2. User selects image on Scan page.
-3. Frontend sends multipart request to backend `/predict/`.
-4. Backend preprocesses image and runs type model.
-5. Backend chooses fish or shrimp disease model.
-6. Backend computes top class and confidence.
-7. Backend attaches advisory metadata and returns JSON.
-8. Frontend stores result in local history and displays Result page.
-9. User can revisit in History or explore static Disease Library.
+```bash
+curl https://aqua-health-system-backend.onrender.com/
+```
 
----
+**Example response**
 
-## 13. Quick Validation Checklist
+```json
+{
+  "message": "Aqua Health System API running"
+}
+```
 
-- Backend starts and responds at `/health`
-- Frontend starts and opens in browser
-- Upload image from `/scan`
-- Prediction appears on `/result`
-- Entry appears in `/history`
-- Language change in `/profile` updates text globally
+### `GET /health`
 
----
+Returns the service health status.
 
-## 14. Recommended Next Improvements
+**Example request**
 
-1. Add persistent backend database for scan records (currently browser-only).
-2. Add model versioning and model metadata endpoint.
-3. Add API contract tests for `/predict/` response schema.
-4. Unify docs to remove old path references and endpoint drift.
-5. Decide whether to delete or integrate legacy `pages/Index.tsx` flow.
+```bash
+curl https://aqua-health-system-backend.onrender.com/health
+```
+
+**Example response**
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### `POST /predict/`
+
+Accepts a multipart form upload with a `file` field containing the image to analyze.
+
+**Example request**
+
+```bash
+curl -X POST "https://aqua-health-system-backend.onrender.com/predict/" \
+  -F "file=@sample-image.jpg"
+```
+
+**Example response**
+
+```json
+{
+  "type": "Fish",
+  "disease": "Fin Rot / Tail Rot",
+  "confidence": 92.5,
+  "severity": "High",
+  "symptoms": "Damaged fins/tail",
+  "causes": "Bacteria or poor water",
+  "treatment": "Antibiotics",
+  "prevention": "Clean environment"
+}
+```
+
+If the model confidence is too low, the API returns an unknown-disease response with an `Uncertain` severity and a message that the disease was not recognized in the trained dataset.
+
+## 🛣️ Future Improvements
+
+- Add persistent backend storage for scan history instead of browser-only storage.
+- Introduce model versioning and a model metadata endpoint.
+- Add automated API contract tests for `/predict/`.
+- Expand the disease library with richer visual and clinical references.
+- Add stronger observability around inference latency and error handling.
+- Decide whether to retire or fully integrate the legacy `Index.tsx` UI path.
+
+## 🤝 Contributing
+
+Contributions are welcome. If you want to improve AquaCare:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes with clear, focused commits.
+4. Verify the backend and frontend still run correctly.
+5. Open a pull request with a concise summary of the change.
+
+Please keep changes consistent with the existing architecture, model workflow, and deployment assumptions.
+
+## 📄 License
+
+No LICENSE file is currently included in this repository.
+
+If you plan to publish or distribute AquaCare, add a license file before treating the project as open source. MIT is a good default if that matches your intended usage and redistribution policy.
+
+## 📬 Contact
+
+Developer: Murali Krishna Medakayala
+
+GitHub: [https://github.com/MuraliOnline-web](https://github.com/MuraliOnline-web)
+
+LinkedIn: [https://www.linkedin.com/in/murali-krishna-medakayala-61b9ab2b9/](https://www.linkedin.com/in/murali-krishna-medakayala-61b9ab2b9/)
