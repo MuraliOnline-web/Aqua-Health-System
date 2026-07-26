@@ -13,7 +13,8 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://localhost:8080",
-    "https://aqua-health-system-frontend.vercel.app"
+    "https://aqua-health-system-frontend.vercel.app",
+    "https://aqua-health-system-frontend-9qs1m1bgj.vercel.app"
 ]
 app.add_middleware(
     CORSMiddleware,
