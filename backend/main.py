@@ -10,15 +10,31 @@ from tensorflow.keras.models import load_model
 app = FastAPI()
 # test comment
 # CORS (React support)
-origins = [
-    "http://localhost:5173",
-    "http://localhost:8080",
-    "https://aqua-health-system-frontend.vercel.app",
-    "https://aqua-health-system-frontend-9qs1m1bgj.vercel.app"
-]
+
+#origins = [
+#   "http://localhost:5173",
+#    "http://localhost:8080",
+#    "https://aqua-health-system-frontend.vercel.app",
+#    "https://aqua-health-system-frontend-9qs1m1bgj.vercel.app"
+#]
+#app.add_middleware(
+#    CORSMiddleware,
+#    allow_origins=origins,
+#    allow_credentials=True,
+#    allow_methods=["*"],
+#    allow_headers=["*"],
+#)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:8080",
+    ],
+
+    allow_origin_regex=r"https://aqua-health-system-frontend.*\.vercel\.app",
+
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
