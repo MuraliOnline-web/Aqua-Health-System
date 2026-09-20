@@ -1,0 +1,13 @@
+# YOLO output and generated artifacts
+yolo/**/test_outputs/
+yolo/**/runs/
+yolo/**/*.pt
+yolo/**/*.onnx
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter
+.ipynb_checkpoints/
